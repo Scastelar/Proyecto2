@@ -14,15 +14,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 public class Login extends JFrame implements ActionListener{
-    static SistemaOperativo sistemaOperativo = new SistemaOperativo();
+    static SistemaOperativo sistemaOperativo =  SistemaOperativo.getInstance();
     private static Usuario usuarioActual = null;
     JLabel perfilImg = new JLabel();
     JTextField usuarioTxt = new JTextField("Ingrese usuario");  
-    JTextField passwordTxt = new JTextField("Ingrese contraseña"); 
+    JPasswordField passwordTxt = new JPasswordField("Ingrese contraseña"); 
     JButton login = new JButton("login");
     private JPanel mainPanel;
 
@@ -46,10 +47,10 @@ public class Login extends JFrame implements ActionListener{
         passwordTxt.setBounds(250, 300, 200, 30);
         passwordTxt.setFont(new java.awt.Font("Trebuchet MS", 1, 12));
         passwordTxt.setForeground(Color.gray);
+        passwordTxt.setEchoChar((char) 0);
         mainPanel.add(passwordTxt);
 
         usuarioTxt.addFocusListener(new FocusAdapter() {
-            @Override
             public void focusGained(FocusEvent e) {
                 if (usuarioTxt.getText().equals("Ingrese usuario")) {
                     usuarioTxt.setText("");
@@ -67,19 +68,20 @@ public class Login extends JFrame implements ActionListener{
         });
 
         passwordTxt.addFocusListener(new FocusAdapter() {
-            @Override
             public void focusGained(FocusEvent e) {
-                if (passwordTxt.getText().equals("Ingrese contraseña")) {
+                if (String.valueOf(passwordTxt.getPassword()).equals("Ingrese contraseña")) {
                     passwordTxt.setText("");
                     passwordTxt.setForeground(Color.black);
+                    passwordTxt.setEchoChar('*'); 
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (passwordTxt.getText().isEmpty()) {
+                if (String.valueOf(passwordTxt.getPassword()).isEmpty()) {
                     passwordTxt.setForeground(Color.gray);
                     passwordTxt.setText("Ingrese contraseña");
+                    passwordTxt.setEchoChar((char) 0);
                 }
             }
         });
@@ -112,20 +114,19 @@ public class Login extends JFrame implements ActionListener{
         this.repaint();
     }
 
-    @Override
     public void actionPerformed(ActionEvent e) {
         if (login==e.getSource()){
             String nombre = usuarioTxt.getText();
-            String contrasena = passwordTxt.getText();
+            String contrasena = String.valueOf(passwordTxt.getPassword());
             usuarioActual = sistemaOperativo.iniciarSesion(nombre, contrasena);
-        if (usuarioActual != null) {
-            SistemaOperativo.getInstance().setUsuarioActual(usuarioActual);
-            new Windows(this).setVisible(true);
-            this.setVisible(false);
+            if (usuarioActual != null) {
+                SistemaOperativo.getInstance().setUsuarioActual(usuarioActual);
+                new Windows(this).setVisible(true);
+                this.setVisible(false);
+            }
         }
-        }
-        
     }
+        
     
     public static void main(String[] args) {
         Login frame = new Login();

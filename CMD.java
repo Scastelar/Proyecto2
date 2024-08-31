@@ -19,7 +19,7 @@ import javax.swing.WindowConstants;
 
 public class CMD extends JFrame {
     private Funciones cmd = new Funciones("");
-    private JTextArea Windows = new JTextArea();;
+    private JTextArea Windows = new JTextArea();
     private JScrollPane scrollPane = new JScrollPane(Windows);
     private Navegador navegador;
     private Usuario usuarioActual;

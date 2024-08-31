@@ -49,4 +49,3 @@ public class Archivo {
         return archivo.getPath();
     }
 }
-

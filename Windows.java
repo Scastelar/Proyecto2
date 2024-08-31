@@ -35,6 +35,11 @@ public class Windows extends JFrame implements ActionListener {
     JLabel defaultLabel = new JLabel();
     Login Log;
 
+    // Referencias a los paneles para evitar recrearlos
+    PerfilPanel perfilPanel;
+    CmdPanel cmdPanel;
+    NavegadorPanel navegadorPanel;
+
     public Windows(Login Log) {
         this.Log = Log;
         setTitle("Windows");
@@ -64,7 +69,16 @@ public class Windows extends JFrame implements ActionListener {
         fechaLabel.setFont(new Font("Arial", Font.BOLD, 14));
         barra2.add(fechaLabel);
 
+        // Crear paneles una sola vez
+        perfilPanel = new PerfilPanel();
+        cmdPanel = new CmdPanel();
+        navegadorPanel = new NavegadorPanel();
+
         contentPanel.add(defaultLabel, "default");
+        contentPanel.add(perfilPanel, "perfil");
+        contentPanel.add(cmdPanel, "cmd");
+        contentPanel.add(navegadorPanel, "navegador");
+
         contentPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 updateBackgroundImage();  // Redimensionar imagen cuando el panel cambie de tamaño
@@ -117,49 +131,46 @@ public class Windows extends JFrame implements ActionListener {
         CardLayout cardActual = (CardLayout) (contentPanel.getLayout());
           
         if (e.getSource() == perfil) {
-            contentPanel.add(new PerfilPanel(), "perfil");
             cardActual.show(contentPanel, "perfil");
         } 
         else if (e.getSource() == cmd) {
-            contentPanel.add(new CmdPanel(), "cmd");
             cardActual.show(contentPanel, "cmd");
         } 
         else if (e.getSource() == docs) {
-            contentPanel.add(new NavegadorPanel(), "navegador");
             cardActual.show(contentPanel, "navegador");
         } 
     }
 
     class PerfilPanel extends JPanel {
         PerfilPanel() {
-        setLayout(new BorderLayout());   
-        Perfil perfilPanel = new Perfil(Log);  
-        this.add(perfilPanel, BorderLayout.CENTER);
-        this.revalidate();
-        this.repaint();
+            setLayout(new BorderLayout());   
+            Perfil perfilPanel = new Perfil(Log);  
+            this.add(perfilPanel, BorderLayout.CENTER);
+            this.revalidate();
+            this.repaint();
         }
     }
 
     class CmdPanel extends JPanel {
         CmdPanel() {
-        Navegador nav = new Navegador(SistemaOperativo.getInstance().getUsuarioActual());
-        setLayout(new BorderLayout());   
-        CMD frame = new CMD(SistemaOperativo.getInstance().getUsuarioActual());
-        JPanel panel = frame.getJFrame();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); 
-        this.add(panel, BorderLayout.CENTER);
-        this.revalidate();
-        this.repaint();
+            Navegador nav = new Navegador(SistemaOperativo.getInstance().getUsuarioActual());
+            setLayout(new BorderLayout());   
+            CMD frame = new CMD(SistemaOperativo.getInstance().getUsuarioActual());
+            JPanel panel = frame.getJFrame();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); 
+            this.add(panel, BorderLayout.CENTER);
+            this.revalidate();
+            this.repaint();
         }
     }
     
     class NavegadorPanel extends JPanel {
         NavegadorPanel(){
-        setLayout(new BorderLayout());   
-        Navegador frame = new Navegador(SistemaOperativo.getInstance().getUsuarioActual());
-        this.add(frame, BorderLayout.CENTER);
-        this.revalidate();
-        this.repaint(); 
+            setLayout(new BorderLayout());   
+            Navegador frame = new Navegador(SistemaOperativo.getInstance().getUsuarioActual());
+            this.add(frame, BorderLayout.CENTER);
+            this.revalidate();
+            this.repaint(); 
         }
     }
     

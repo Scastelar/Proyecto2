@@ -9,6 +9,7 @@ import java.util.Comparator;
 
 public class Navegador extends JPanel{
     private Usuario usuario;
+    private JTree tree;
     JButton ordenar = new JButton("Ordenar");
     JButton renombrar = new JButton("Renombrar");
     JButton crear = new JButton("Crear");
@@ -22,8 +23,8 @@ public class Navegador extends JPanel{
         
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(255, 240, 245)); 
-        
-        JTree tree = createTree(usuario.getDirectorioRaiz());
+        //JTree tree = createTree(usuario.getDirectorioRaiz());
+        tree = new JTree(createTree());
         JScrollPane scrollPane = new JScrollPane(tree);
         panel.add(scrollPane, BorderLayout.CENTER);
 
@@ -49,24 +50,17 @@ public class Navegador extends JPanel{
         setVisible(true);
     }
 
-    private JTree createTree(Directorio raiz) {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode(raiz.getName());
-        DefaultMutableTreeNode folder1 = new DefaultMutableTreeNode("Folder1");
-        DefaultMutableTreeNode folder2 = new DefaultMutableTreeNode("Folder2");
+    private DefaultMutableTreeNode createTree() {
+        // Nodo raíz con el nombre del usuario
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(usuario.getNombre());
 
-        root.add(folder1);
-        root.add(folder2);
-        
-        folder1.add(new DefaultMutableTreeNode("File1.txt"));
-        folder1.add(new DefaultMutableTreeNode("File2.docx"));
-        folder2.add(new DefaultMutableTreeNode("File3.pdf"));
-        folder2.add(new DefaultMutableTreeNode("File4.png"));
-        
-        JTree tree = new JTree(root);
-        tree.setRootVisible(true);
-        tree.setShowsRootHandles(true);
-        
-        return tree;
+        // Agregar los folders del usuario actual
+        for (String folder : usuario.getFolders()) {
+            DefaultMutableTreeNode folderNode = new DefaultMutableTreeNode(folder);
+            root.add(folderNode);
+        }
+
+        return root;
     }
 
     private JButton createButton(String text, ActionListener action) {

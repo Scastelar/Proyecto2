@@ -92,8 +92,9 @@ public class Perfil extends JPanel implements ActionListener {
         if (crear==e.getSource()){
         String nombre = JOptionPane.showInputDialog("Ingrese username nuevo:");
         String password = JOptionPane.showInputDialog("Ingrese contraseña");
-
-        Log.sistemaOperativo.getAdministrador().crearUsuario(nombre, password, sistemaOperativo);
+        sistemaOperativo.crearUsuario(nombre, password);
+        //SistemaOperativo.getInstance().crearUsuario(nombre, password);
+        //Log.sistemaOperativo.getAdministrador().crearUsuario(nombre, password, sistemaOperativo);
         }
         if (cerrarSesion==e.getSource()){
             SistemaOperativo.getInstance().cerrarSesion();
